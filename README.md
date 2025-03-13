@@ -29,8 +29,10 @@ This lab provides hands-on experience with key components of robotic navigation 
 First, connect the ultrasonic sensor as shown below in Figure 1.
 
 ![Schematic 1](https://github.com/meganfister/Lab6/blob/main/Lab%206%20Schematic%201.png)
+
 Figure 1: Connection of the HC-SR04 Ultrasonic Sensor to the RedBoard
-(https://learn.sparkfun.com/tutorial/sparkfun-inventors-kit-experiment-guide---v40/circuit-3b-)
+
+(https://learn.sparkfun.com/tutorial/sparkfun-inventors-kit-experiment-guide---v40/circuit-3b-distance-sensor)
 
 Next, connect the RedBoard to the computer and start the Arduino IDE on the computer. Our constructed circuit is pictured below.
 
