@@ -5,7 +5,12 @@ Aashika Uppala, Megan Fister
 3/12/25
 
 ### Introduction
-
+In this lab, we explore the fundamental principles of sensing and mobility for basic robotic applications. 
+Specifically, we focus on using the HC-SR04 ultrasonic sensor to measure distances and integrate this data into a robotic system to enhance mobility and collision avoidance.
+The lab introduces the concept of analog and digital sensors, explaining how they differ in terms of signal processing and application. 
+Additionally, we work with actuators and an H-Bridge motor driver to control the movement of a two-motor system. 
+By programming the Arduino to process sensor data and regulate motor behavior, we aim to create a simple autonomous collision-avoidance system. 
+This lab provides hands-on experience with key components of robotic navigation and reinforces the importance of sensor integration in automated systems.
 ### Methods
 #### Instruments
 •	A Computer running Arduino IDE
@@ -289,3 +294,7 @@ void leftMotor(int motorSpeed)                        //function for driving the
 ### Results
 ### Discussion
 ### Conclusion
+Through this lab, we successfully implemented and tested an ultrasonic sensor for distance measurement and integrated it with motor control to achieve obstacle avoidance. 
+By understanding the resolution and limitations of the HC-SR04 sensor, we assessed its effectiveness in detecting objects and stopping the robot when necessary.
+Additionally, working with an H-Bridge motor driver allowed us to control motor direction and speed efficiently, demonstrating the importance of actuators in robotic movement. The integration of sensors and actuators in this experiment provided valuable insight into real-world applications, such as autonomous vehicles and robotic navigation systems.
+Overall, this lab enhanced our understanding of sensor-based mobility and the practical challenges of implementing autonomous robotic systems.
