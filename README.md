@@ -34,7 +34,7 @@ _Figure 1. Connection of the HC-SR04 Ultrasonic Sensor to the RedBoard (Schemati
 
 _(https://learn.sparkfun.com/tutorial/sparkfun-inventors-kit-experiment-guide---v40/circuit-3b-distance-sensor)_
 
-Next, we connected the RedBoard to the computer and start the Arduino IDE on the computer. Our constructed circuit is pictured below.
+Next, we connected the RedBoard to the computer and started the Arduino IDE on the computer. Our constructed circuit is pictured below.
 
 ![Circuit 1](https://github.com/meganfister/Lab6/blob/main/Lab%206%20Calibration%20Distance.jpg)
 
