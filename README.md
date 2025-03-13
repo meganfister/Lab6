@@ -11,7 +11,7 @@ The lab introduces the concept of analog and digital sensors, explaining how the
 Additionally, we work with actuators and an H-Bridge motor driver to control the movement of a two-motor system. 
 By programming the Arduino to process sensor data and regulate motor behavior, we aim to create a simple autonomous collision-avoidance system. 
 This lab provides hands-on experience with key components of robotic navigation and reinforces the importance of sensor integration in automated systems.
-### Methods
+### Methods/Results
 #### Instruments
 •	A Computer running Arduino IDE
 
@@ -30,11 +30,15 @@ First, connect the ultrasonic sensor as shown below in Figure 1.
 
 ![Schematic 1](https://github.com/meganfister/Lab6/blob/main/Lab%206%20Schematic%201.png)
 
-Figure 1: Connection of the HC-SR04 Ultrasonic Sensor to the RedBoard
+_Figure 1. Connection of the HC-SR04 Ultrasonic Sensor to the RedBoard (Schematic)_
 
-(https://learn.sparkfun.com/tutorial/sparkfun-inventors-kit-experiment-guide---v40/circuit-3b-distance-sensor)
+_(https://learn.sparkfun.com/tutorial/sparkfun-inventors-kit-experiment-guide---v40/circuit-3b-distance-sensor)_
 
 Next, connect the RedBoard to the computer and start the Arduino IDE on the computer. Our constructed circuit is pictured below.
+
+![Circuit 1](https://github.com/meganfister/Lab6/blob/main/Lab%206%20Calibration%20Distance.jpg)
+
+_Figure 2. Connection of the HC-SR04 Ultrasonic Sensor to the RedBoard (Built Circuit)_
 
 Using the instructions in https://projecthub.arduino.cc/Isaac100/getting-started-with-the-hc-sr04-ultrasonic-sensor-7cabe1 for guidance, we programmed an algorithm to read the distance from the sensor and send the value over serial communications. The code we used is shown below. We changed the pin numbers to match the pins we used in our circuit.
 
@@ -64,29 +68,180 @@ void loop() {
   delay(100);
 }
 ```
-Next, we used the ruler provided to test your algorithm.
+Next, we used the ruler provided to test the algorithm.
 
-a. What is the resolution of this sensing system?
+To evaluate the resolution and precision of the ultrasonic sensor, we first calibrated the sensor using a known reference point. We positioned the function generator, which served as our measurement object, at 3.10 cm from the sensor, aligning it with the end of the black section on the board. We observed the sensor's output through the Arduino serial monitor. A photo of the function generator at calibration distance is pictured below.
 
-b. Try to move your obstacle by a millimeter and determine qualitatively how precise it is.
+![Calibration Distance](https://github.com/meganfister/Lab6/blob/main/Lab%206%20Calibration%20Distance%20Side%20View.jpg)
 
-We calibrated the sensor at 3.10 cm, aligning it with the end of the black section on the board. Before reaching the 3.10 cm mark, the measured distance fluctuated inconsistently between 2 cm, 4 cm, and 6 cm. When the function generator (the object we were using to measure distance) was placed very close to the sensor, the reading spiked to 2200 cm. Accuracy improved once the object was positioned at 3 cm. To test precision, we moved the function generator by 1 mm, and the sensor reading adjusted to 3.21 cm, indicating a responsive measurement. When we moved the object to 4 cm, the sensor recorded 3.94 cm, showing consistent performance. Based on these observations, the practical resolution of the system is approximately 0.1 cm (1 mm), as it reliably detects changes of this magnitude.
+_Figure 3. Function generator at calibration distance_
+
+To assess the sensor’s precision, we moved the function generator by 1 mm and measured 3.21 cm, pictured below.
+
+![Moving object away from sensor](https://github.com/meganfister/Lab6/blob/main/Lab%206%20Moving%20Object%200.1.jpg)
+
+_Figure 4. Measurement of function generator after it is moved 1 mm from calibration distance_
+
+We then moved the function generator to 4 cm to test the sensor's precision at a slightly further distance, and the sensor measured 3.94 cm.
+
 
 #### Part 2
-Next, we moved the ultrasonic sensor connections on the RedBoard to pins 7 and 6. We connected the RedBoard, the Motor Driver, and the Motors as shown below in Figure 2.
+Next, we moved the ultrasonic sensor connections on the RedBoard to pins 7 and 6. We connected the RedBoard, the Motor Driver, and the Motors as shown below in Figure 2. We did not include the sliding switch circuit in the diagram below.
+
+![Schematic 2](https://github.com/meganfister/Lab6/blob/main/Lab%206%20Schematic%202.png)
+
+_Figure 5. Two Motor Connection (Schematic)_
+
+_(https://learn.sparkfun.com/tutorials/sparkfun-inventors-kit-experiment-guide---v40/circuit-5b-remote-controlled-robot)_
+
+The built circuit can be seen in the picture below.
+
+![Circuit 2](https://github.com/meganfister/Lab6/blob/main/Lab%206%20Circuit%20Part%202.jpg)
+
+_Figure 6. Two Motor Connection (Built Circuit)_
 
 Using https://learn.sparkfun.com/tutorials/sparkfun-inventors-kit-experiment-guide---v40/circuit-5b-remote-controlled-robot for guidance, we wrote a program to control the movement of both motors.
 
-Insert commands via serial port to move both motors at 3 different speeds (slow, medium, fast). Document all code.
-
-Questions: What is the minimum speed number for the motors to move forward?
-
-4. Test the program by making the motors move as if the robot were turning right, turning left, and going backward at any speed.
-
-5. Include the code from the distance sensor to make the motors stop when the distance measured is less than 10cm. Demonstrate your code to the instructor.
-
+First, we edited the prompt so that the user will enter a direction and speed.
 
 ```c++
+  //prompt the user to enter a command
+  Serial.println("Enter a direction followed by a speed (low, medium, high).");
+  Serial.println("f = forward, b = backward, r = turn right, l = turn left");
+  Serial.println("Example command: f low");
+```
+
+  Then, we used the code to write 
+  
+```c++
+  void loop()
+{
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration*.0343)/2;
+  Serial.print("Distance: ");
+  Serial.println(distance);
+
+
+  {                                                     //if the switch is in the ON position
+    if (Serial.available() > 0)                         //if the user has sent a command to the RedBoard
+    {
+      botDirection = Serial.readStringUntil(' ');       //read the characters in the command until you reach the first space
+      speed = Serial.readStringUntil(' ');           //read the characters in the command until you reach the second space
+
+
+      //print the command that was just received in the serial monitor
+      Serial.print(botDirection);
+      Serial.print(" ");
+      Serial.println(speed);
+```
+
+Next, we updated the if/else statements to right the motors at different speeds and directions based on the user input. The speeds for low, medium, and high were determined based on the maximum and minimum speeds that the motors would run at.
+
+```c++
+      if (botDirection == "f")                         //if the entered direction is forward
+      {
+        if (speed == "low")
+        {
+          rightMotor(80);
+          leftMotor(80);
+        }
+        if (speed == "medium")
+        {
+        rightMotor(150);
+        leftMotor(150);
+        }
+        if (speed == "high")
+        {
+        rightMotor(230);
+        leftMotor(230);
+        }
+      }
+      else if (botDirection == "b")                    //if the entered direction is backward
+       {
+        if (speed == "low")
+        {
+          rightMotor(-80);
+          leftMotor(-80);
+        }
+        if (speed == "medium")
+        {
+        rightMotor(-150);
+        leftMotor(-150);
+        }
+        if (speed == "high")
+        {
+        rightMotor(-230);
+        leftMotor(-230);
+        }
+        }
+      else if (botDirection == "r")                     //if the entered direction is right
+        {
+        if (speed == "low")
+        {
+          rightMotor(-80);
+          leftMotor(80);
+        }
+        if (speed == "medium")
+        {
+        rightMotor(-150);
+        leftMotor(150);
+        }
+        if (speed == "high")
+        {
+        rightMotor(-230);
+        leftMotor(230);
+        }
+          }
+      else if (botDirection == "l")                   //if the entered direction is left
+      {
+       if (speed == "low")
+      {
+        rightMotor(80);
+        leftMotor(-80);
+      }
+      if (speed == "medium")
+      {
+        rightMotor(150);
+        leftMotor(-150);
+      }
+      if (speed == "high")
+      {
+        rightMotor(230);
+        leftMotor(-230);
+      }
+      }
+    }
+  }
+}
+```
+
+We tested the program by making the motors move as if the robot were turning right, turning left, and going backward at any low, medium, and high speed.
+
+Finally, we added the code from the distance sensor to make the motors stop when the distance measured is less than 10 cm. The reference for the prewritten code that we used and edited is at the beginnging of our final code shown below. 
+
+```c++
+/*
+  SparkFun Inventor’s Kit
+  Circuit 5B - Remote Control Robot
+
+  Control a two wheeled robot by sending direction commands through the serial monitor.
+  This sketch was adapted from one of the activities in the SparkFun Guide to Arduino.
+  Check out the rest of the book at
+  https://www.sparkfun.com/products/14326
+
+  This sketch was written by SparkFun Electronics, with lots of help from the Arduino community.
+  This code is completely free for any use.
+
+  View circuit diagram and instructions at: https://learn.sparkfun.com/tutorials/sparkfun-inventors-kit-experiment-guide---v40
+  Download drawings and code at: https://github.com/sparkfun/SIK-Guide-Code
+*/
+
 //the right motor will be controlled by the motor A pins on the motor driver
 const int AIN1 = 13;           //control pin 1 on the motor driver for the right motor
 const int AIN2 = 12;            //control pin 2 on the motor driver for the right motor
@@ -295,8 +450,17 @@ void leftMotor(int motorSpeed)                        //function for driving the
 }
 ```
 
-### Results
 ### Discussion
+#### Part 1
+_What is the resolution of this sensing system?_
+
+_Try to move your obstacle by a millimeter and determine qualitatively how precise it is._
+
+We calibrated the sensor at 3.10 cm, aligning it with the end of the black section on the board. Before reaching the 3.10 cm mark, the measured distance fluctuated inconsistently between 2 cm, 4 cm, and 6 cm. When the function generator (the object we were using to measure distance) was placed very close to the sensor, the reading spiked to 2200 cm. Accuracy improved once the object was positioned at 3 cm. To test precision, we moved the function generator by 1 mm, and the sensor reading adjusted to 3.21 cm, indicating a responsive measurement. When we moved the object to 4 cm, the sensor recorded 3.94 cm, showing consistent performance. Based on these observations, the practical resolution of the system is approximately 0.1 cm (1 mm), as it reliably detects changes of this magnitude.
+#### Part 2
+_What is the minimum speed number for the motors to move forward?_
+
+
 ### Conclusion
 Through this lab, we successfully implemented and tested an ultrasonic sensor for distance measurement and integrated it with motor control to achieve obstacle avoidance. 
 By understanding the resolution and limitations of the HC-SR04 sensor, we assessed its effectiveness in detecting objects and stopping the robot when necessary.
